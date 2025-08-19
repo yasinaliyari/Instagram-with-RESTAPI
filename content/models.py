@@ -62,3 +62,15 @@ class Tag(BaseModel):
 
     def __str__(self):
         return self.title
+
+
+class PostTag(BaseModel):
+    post = models.ForeignKey(Post, related_name="hashtags", on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, related_name="posts", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _("PostTag")
+        verbose_name_plural = _("PostTags")
+
+    def __str__(self):
+        return "{} - {}".format(self.post, self.tag)
