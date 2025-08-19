@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "activity.apps.ActivityConfig",
     "content.apps.ContentConfig",
     "location.apps.LocationConfig",
+    "relation.apps.RelationConfig",
 ]
 
 MIDDLEWARE = [
