@@ -74,3 +74,19 @@ class PostTag(BaseModel):
 
     def __str__(self):
         return "{} - {}".format(self.post, self.tag)
+
+
+class TaggedUser(BaseModel):
+    user = models.ForeignKey(
+        User, related_name="tagged_posts", on_delete=models.CASCADE
+    )
+    post = models.ForeignKey(
+        Post, related_name="tagged_users", on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = _("TaggedUser")
+        verbose_name_plural = _("TaggedUsers")
+
+    def __str__(self):
+        return "{} - {}".format(self.user, self.post)
