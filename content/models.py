@@ -21,3 +21,33 @@ class Post(BaseModel):
 
     def __str__(self):
         return "{} ({})".format(self.user, self.id)
+
+
+class PostMedia(BaseModel):
+    IMAGE = 1
+    VIDEO = 2
+
+    TYPE_CHOICES = (
+        (IMAGE, _("Image")),
+        (VIDEO, _("Video")),
+    )
+    media_type = models.PositiveSmallIntegerField(
+        _("media type"), choices=TYPE_CHOICES, default=IMAGE
+    )
+    post = models.ForeignKey(Post, related_name="media", on_delete=models.CASCADE)
+    media_file = models.FileField(
+        _("media file"),
+        upload_to="content/media/",
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=("jpg", "jpeg", "mp4", "wmv", "flv", "png")
+            )
+        ],
+    )
+
+    class Meta:
+        verbose_name = _("PostMedia")
+        verbose_name_plural = _("PostMedia")
+
+    def __str__(self):
+        return "{} - {}".format(str(self.post), self.get_media_type_display())
