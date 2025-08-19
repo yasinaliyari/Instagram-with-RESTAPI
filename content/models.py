@@ -51,3 +51,14 @@ class PostMedia(BaseModel):
 
     def __str__(self):
         return "{} - {}".format(str(self.post), self.get_media_type_display())
+
+
+class Tag(BaseModel):
+    title = models.CharField(_("title"), max_length=32)
+
+    class Meta:
+        verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
+
+    def __str__(self):
+        return self.title
