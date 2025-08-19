@@ -5,4 +5,7 @@ from location.models import Location
 
 @register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ("title",)
+    list_display = (
+        "title",
+        "created_time",
+    )
