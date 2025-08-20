@@ -24,3 +24,13 @@ class TagDetailSerializer(serializers.ModelSerializer):
 
     def get_posts(self, obj):
         return obj.posts.count()
+
+
+class PostMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostMedia
+        fields = (
+            "id",
+            "media_type",
+            "media_file",
+        )
