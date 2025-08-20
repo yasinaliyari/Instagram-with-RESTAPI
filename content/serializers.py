@@ -34,3 +34,18 @@ class PostMediaSerializer(serializers.ModelSerializer):
             "media_type",
             "media_file",
         )
+
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.username")
+    location = LocationSerializer()
+    media = PostMediaSerializer(many=True)
+
+    class Meta:
+        model = Post
+        fields = (
+            "caption",
+            "user",
+            "location",
+            "media",
+        )
