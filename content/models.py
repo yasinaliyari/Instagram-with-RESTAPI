@@ -32,11 +32,11 @@ class PostMedia(BaseModel):
         (VIDEO, _("Video")),
     )
     media_type = models.PositiveSmallIntegerField(
-        _("media type"), choices=TYPE_CHOICES, default=IMAGE
+        _("media_type"), choices=TYPE_CHOICES, default=IMAGE
     )
     post = models.ForeignKey(Post, related_name="media", on_delete=models.CASCADE)
     media_file = models.FileField(
-        _("media file"),
+        _("media_file"),
         upload_to="content/media/",
         validators=[
             FileExtensionValidator(
