@@ -7,5 +7,5 @@ from location.models import Location
 class LocationAdmin(admin.ModelAdmin):
     list_display = (
         "title",
-        "created_time",
+        "points",
     )
