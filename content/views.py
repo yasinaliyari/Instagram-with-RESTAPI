@@ -1,7 +1,11 @@
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from content.models import Tag, Post
 from content.serializers import (
     TagListSerializer,
@@ -18,6 +22,8 @@ class TagDetailAPI(APIView):
 
 
 class TagListAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, *args, **kwargs):
         tags = Tag.objects.all()
         serializer = TagListSerializer(tags, many=True)
