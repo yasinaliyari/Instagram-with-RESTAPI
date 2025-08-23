@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, ListCreateAPIView
+from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from activity.models import Comment
 from activity.serializers import CommentCreateSerializer, CommentListSerializer
@@ -16,3 +16,8 @@ class CommentListCreateAPIView(ListCreateAPIView):
         if self.request.method == "GET":
             return CommentListSerializer
         return self.serializer_class
+
+
+class CommentRetrieveAPIView(RetrieveAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentListSerializer
