@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from activity.models import Comment
-from content.serializers import PostDetailSerializer
 from django.utils.translation import gettext_lazy as _
 
 
@@ -24,10 +23,27 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class CommentListSerializer(serializers.ModelSerializer):
-    post = PostDetailSerializer()
+class CommentRepliesListSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username")
 
     class Meta:
         model = Comment
-        fields = ("id", "caption", "reply_to", "user", "post")
+        fields = ("id", "caption", "user", "reply_to")
+
+
+class CommentListSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.username")
+    replies = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ("id", "caption", "replies", "user")
+
+    def get_replies(self, obj):
+        qs = obj.replies.all()
+
+        if qs.count() > 10:
+            qs = qs[:10]
+
+        serializer = CommentRepliesListSerializer(qs, many=True)
+        return serializer.data
