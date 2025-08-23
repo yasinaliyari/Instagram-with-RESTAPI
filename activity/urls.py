@@ -4,7 +4,7 @@ from activity.views import CommentListCreateAPIView, CommentRetrieveAPIView
 urlpatterns = [
     path("comment/create/", CommentListCreateAPIView.as_view(), name="comment-create"),
     path(
-        "comment/retrieve/<int:pk>/",
+        "comment/retrieve/<int:some_key>/",
         CommentRetrieveAPIView.as_view(),
         name="comment-retrieve",
     ),
