@@ -3,6 +3,7 @@ from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveAPIView,
     RetrieveUpdateAPIView,
+    DestroyAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
 from activity.models import Comment
@@ -38,3 +39,7 @@ class CommentRetrieveAPIView(RetrieveUpdateAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(user=self.request.user)
+
+
+class CommentDestroyAPIView(DestroyAPIView):
+    queryset = Comment.objects.all()
