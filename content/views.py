@@ -1,5 +1,5 @@
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -21,13 +21,15 @@ class TagDetailAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class TagListAPI(APIView):
+class TagListAPI(ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagListSerializer
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, *args, **kwargs):
-        tags = Tag.objects.all()
-        serializer = TagListSerializer(tags, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # def get(self, request, *args, **kwargs):
+    #     tags = Tag.objects.all()
+    #     serializer = TagListSerializer(tags, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         serializer = TagListSerializer(data=request.data)
