@@ -5,10 +5,7 @@ from content.models import Post, PostMedia, Tag, PostTag, TaggedUser
 
 @register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = (
-        "user",
-        "created_time",
-    )
+    list_display = ("caption", "user", "location")
 
 
 @register(PostMedia)
