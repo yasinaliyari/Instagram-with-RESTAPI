@@ -21,6 +21,7 @@ class TagDetailSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "title",
+            "posts",
         )
 
     def get_posts(self, obj):
