@@ -20,6 +20,7 @@ from content.serializers import (
 )
 from lib.pagination import SmallPageNumberPagination, StandardCursorPagination
 from lib.permissions import RelationExists
+from rest_framework import viewsets
 
 
 class TagDetailAPI(APIView):
@@ -57,3 +58,15 @@ class UserPostsListAPIView(ListAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(user_id=self.kwargs[self.lookup_url_kwarg])
+
+
+class UserPostReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Post.objects.all()
+    lookup_url_kwarg = "pk"
+    serializer_class = PostDetailSerializer
+    pagination_class = StandardCursorPagination
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user__username=self.kwargs["username"])

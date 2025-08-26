@@ -7,7 +7,7 @@ class SmallPageNumberPagination(PageNumberPagination):
     max_page_size = 7
 
 
-class StandardCursorPagination(CursorPagination):
+class StandardCursorPagination(PageNumberPagination):
     ordering = "-created_time"
 
 
