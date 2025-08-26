@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from activity.models import Comment
+from activity.models import Comment, Like
 from django.utils.translation import gettext_lazy as _
 
 
@@ -47,3 +47,9 @@ class CommentListSerializer(serializers.ModelSerializer):
 
         serializer = CommentRepliesListSerializer(qs, many=True)
         return serializer.data
+
+
+class PostLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ("post",)
