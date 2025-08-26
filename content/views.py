@@ -62,7 +62,7 @@ class UserPostsListAPIView(ListAPIView):
     queryset = Post.objects.all()
     lookup_url_kwarg = "user_id"
     serializer_class = PostDetailSerializer
-    pagination_class = StandardPageNumberPagination
+    # pagination_class = StandardPageNumberPagination
 
     def get_queryset(self):
         qs = super().get_queryset()
