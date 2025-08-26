@@ -17,7 +17,7 @@ from content.serializers import (
     TagDetailSerializer,
     PostDetailSerializer,
 )
-from lib.pagination import SmallPageNumberPagination, StandardPageNumberPagination
+from lib.pagination import SmallPageNumberPagination, StandardCursorPagination
 
 
 class TagDetailAPI(APIView):
@@ -62,7 +62,7 @@ class UserPostsListAPIView(ListAPIView):
     queryset = Post.objects.all()
     lookup_url_kwarg = "user_id"
     serializer_class = PostDetailSerializer
-    # pagination_class = StandardPageNumberPagination
+    pagination_class = StandardCursorPagination
 
     def get_queryset(self):
         qs = super().get_queryset()
