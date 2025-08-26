@@ -4,6 +4,7 @@ from rest_framework.generics import (
     ListAPIView,
     ListCreateAPIView,
     CreateAPIView,
+    RetrieveAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -18,6 +19,7 @@ from content.serializers import (
     PostDetailSerializer,
 )
 from lib.pagination import SmallPageNumberPagination, StandardCursorPagination
+from lib.permissions import RelationExists
 
 
 class TagDetailAPI(APIView):
@@ -33,29 +35,16 @@ class TagListAPI(ListAPIView):
     permission_classes = (IsAuthenticated,)
     pagination_class = SmallPageNumberPagination
 
-    # def get(self, request, *args, **kwargs):
-    #     tags = Tag.objects.all()
-    #     serializer = TagListSerializer(tags, many=True)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-
-    # def post(self, request, *args, **kwargs):
-    #     serializer = TagListSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(status=status.HTTP_201_CREATED)
-    #     return Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 class TagCreateAPIView(CreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagListSerializer
 
 
-class PostDetailAPI(APIView):
-    def get(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(Post, **{"pk": pk})
-        serializer = PostDetailSerializer(instance)
-        return Response(serializer.data)
+class PostDetailAPI(RetrieveAPIView):
+    permission_classes = [IsAuthenticated, RelationExists]
+    serializer_class = PostDetailSerializer
+    queryset = Post.objects.all()
 
 
 class UserPostsListAPIView(ListAPIView):
@@ -63,6 +52,7 @@ class UserPostsListAPIView(ListAPIView):
     lookup_url_kwarg = "user_id"
     serializer_class = PostDetailSerializer
     pagination_class = StandardCursorPagination
+    permission_classes = [IsAuthenticated, RelationExists]
 
     def get_queryset(self):
         qs = super().get_queryset()
