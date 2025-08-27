@@ -9,12 +9,13 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.throttling import UserRateThrottle
+from rest_framework.versioning import URLPathVersioning
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from activity.serializers import LikeSerializer
+from activity.serializers import LikeSerializer, NewLikeSerializer
 from content.models import Tag, Post
 from content.serializers import (
     TagListSerializer,
@@ -25,8 +26,8 @@ from lib.pagination import SmallPageNumberPagination, StandardCursorPagination
 from lib.permissions import RelationExists
 from rest_framework import viewsets
 from rest_framework import throttling
-
 from lib.throttle import CustomThrottle
+from rest_framework import versioning
 
 
 class TagDetailAPI(APIView):
@@ -90,7 +91,10 @@ class UserPostViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == "get_likes_list":
-            return LikeSerializer
+            if self.request.version == "1.0":
+                return LikeSerializer
+            else:
+                return NewLikeSerializer
         return self.serializer_class
 
     @action(detail=True)

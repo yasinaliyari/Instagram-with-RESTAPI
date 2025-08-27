@@ -146,6 +146,7 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.ScopedRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {"anon": "3/m", "user": "5/m", "custom": "4/m"},
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.AcceptHeaderVersioning",
 }
 
 SIMPLE_JWT = {
