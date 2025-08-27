@@ -7,11 +7,15 @@ from content.views import (
     UserPostsListAPIView,
     UserPostViewSet,
 )
+from rest_framework.routers import SimpleRouter
 
-user_post_detail = UserPostViewSet.as_view(
-    {"get": "retrieve", "put": "update", "delete": "destroy"}
-)
-user_post_list = UserPostViewSet.as_view({"get": "list", "post": "create"})
+router = SimpleRouter()
+router.register("post", UserPostViewSet, "user-post")
+
+# user_post_detail = UserPostViewSet.as_view(
+#     {"get": "retrieve", "put": "update", "delete": "destroy"}
+# )
+# user_post_list = UserPostViewSet.as_view({"get": "list", "post": "create"})
 urlpatterns = [
     path("tags/", TagListAPI.as_view(), name="tags-list"),
     path("tags/create/", TagCreateAPIView.as_view(), name="tags-create"),
@@ -22,8 +26,9 @@ urlpatterns = [
     #     UserPostsListAPIView.as_view(),
     #     name="user-posts-list",
     # ),
-    path("user/<str:username>/posts/", user_post_list, name="user_post_list"),
-    path(
-        "user/<str:username>/posts/<int:pk>/", user_post_detail, name="user_post_detail"
-    ),
+    # path("user/<str:username>/posts/", user_post_list, name="user_post_list"),
+    # path(
+    #     "user/<str:username>/posts/<int:pk>/", user_post_detail, name="user_post_detail"
+    # ),
+    path("user/<str:username>/", include(router.urls)),
 ]
