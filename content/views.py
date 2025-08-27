@@ -1,4 +1,5 @@
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import action
 from rest_framework.generics import (
     get_object_or_404,
     ListAPIView,
@@ -12,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from activity.serializers import LikeSerializer
 from content.models import Tag, Post
 from content.serializers import (
     TagListSerializer,
@@ -78,3 +80,21 @@ class UserPostViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated, RelationExists]
 
         return [permission() for permission in self.permission_classes]
+
+    def get_serializer_class(self):
+        if self.action == "get_likes_list":
+            return LikeSerializer
+        return self.serializer_class
+
+    @action(detail=True)
+    def get_likes_list(self, request, *args, **kwargs):
+        post = self.get_object()
+        queryset = post.likes.all()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
