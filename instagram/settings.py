@@ -143,10 +143,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 15,
     "DEFAULT_THROTTLE_CLASSES": [
-        "rest_framework.throttling.AnonRateThrottle",
-        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle",
     ],
-    "DEFAULT_THROTTLE_RATES": {"anon": "3/m", "user": "5/m"},
+    "DEFAULT_THROTTLE_RATES": {"anon": "3/m", "user": "5/m", "custom": "4/m"},
 }
 
 SIMPLE_JWT = {

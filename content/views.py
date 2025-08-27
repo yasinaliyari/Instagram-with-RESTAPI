@@ -8,6 +8,7 @@ from rest_framework.generics import (
     RetrieveAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -23,6 +24,9 @@ from content.serializers import (
 from lib.pagination import SmallPageNumberPagination, StandardCursorPagination
 from lib.permissions import RelationExists
 from rest_framework import viewsets
+from rest_framework import throttling
+
+from lib.throttle import CustomThrottle
 
 
 class TagDetailAPI(APIView):
@@ -56,6 +60,7 @@ class UserPostsListAPIView(ListAPIView):
     serializer_class = PostDetailSerializer
     pagination_class = StandardCursorPagination
     permission_classes = [IsAuthenticated, RelationExists]
+    throttle_classes = [CustomThrottle]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -67,7 +72,9 @@ class UserPostViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = "pk"
     serializer_class = PostDetailSerializer
     pagination_class = StandardCursorPagination
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, RelationExists]
+    # throttle_classes = [UserRateThrottle, CustomThrottle]
+    throttle_scope = "custom"
 
     def get_queryset(self):
         qs = super().get_queryset()
