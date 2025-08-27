@@ -60,7 +60,7 @@ class UserPostsListAPIView(ListAPIView):
         return qs.filter(user_id=self.kwargs[self.lookup_url_kwarg])
 
 
-class UserPostReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+class UserPostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     lookup_url_kwarg = "pk"
     serializer_class = PostDetailSerializer
@@ -70,3 +70,11 @@ class UserPostReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(user__username=self.kwargs["username"])
+
+    def get_permissions(self):
+        if self.action == "list":
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAuthenticated, RelationExists]
+
+        return [permission() for permission in self.permission_classes]
